@@ -1,0 +1,47 @@
+<svg width="100%" viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    
+
+    <!-- Gold gradient for the J mark -->
+    <linearGradient id="jgrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dbb98a"/>
+      <stop offset="100%" stop-color="#c49c68"/>
+    </linearGradient>
+    <linearGradient id="jgrad-dark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c49c68"/>
+      <stop offset="100%" stop-color="#9a6a30"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ── J monogram mark ── -->
+  <!-- Outer elegant loop — the foot of the J curling left -->
+  <path d="M 148 68&#10;       C 148 68, 148 68, 148 68&#10;       L 148 195&#10;       C 148 230, 130 258, 100 262&#10;       C 72  266,  52 248,  52 222&#10;       C 52  205,  62 192,  78 188" fill="none" stroke="url(#jgrad)" stroke-width="5" stroke-linecap="round" opacity="0.95" style="fill:none;color:rgb(255, 255, 255);stroke-width:5px;stroke-linecap:round;stroke-linejoin:miter;opacity:0.95;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Serif cap of the J — horizontal top bar -->
+  <line x1="128" y1="68" x2="168" y2="68" stroke="url(#jgrad)" stroke-width="4.5" stroke-linecap="round" style="fill:rgb(0, 0, 0);color:rgb(255, 255, 255);stroke-width:4.5px;stroke-linecap:round;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Toe taper of the curl -->
+  <path d="M 78 188 C 68 186, 56 190, 52 200" fill="none" stroke="url(#jgrad)" stroke-width="3" stroke-linecap="round" opacity="0.7" style="fill:none;color:rgb(255, 255, 255);stroke-width:3px;stroke-linecap:round;stroke-linejoin:miter;opacity:0.7;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── Footprint toes — 4 descending dots ── -->
+  <circle cx="158" cy="44" r="9" fill="url(#jgrad)" opacity="0.95" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.95;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <circle cx="178" cy="54" r="6.5" fill="url(#jgrad)" opacity="0.85" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.85;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <circle cx="193" cy="64" r="4.5" fill="url(#jgrad)" opacity="0.75" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.75;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <circle cx="204" cy="74" r="3" fill="url(#jgrad)" opacity="0.6" style="stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.6;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── Thin horizontal rule separating mark from text ── -->
+  <line x1="232" y1="100" x2="232" y2="230" stroke="url(#jgrad)" stroke-width="0.75" opacity="0.45" style="fill:rgb(0, 0, 0);color:rgb(255, 255, 255);stroke-width:0.75px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.45;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- ── JOFTA wordmark ── -->
+  <text x="256" y="165" font-size="92" dominant-baseline="central" text-anchor="start" style="fill:rgb(240, 235, 227);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Jost, sans-serif;font-size:92px;font-weight:200;text-anchor:start;dominant-baseline:central">JOFTA</text>
+
+  <!-- ── Solemates tagline ── -->
+  <text x="260" y="215" font-size="30" dominant-baseline="central" text-anchor="start" style="fill:rgb(196, 156, 104);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Cormorant Garamond&quot;, Georgia, serif;font-size:30px;font-weight:300;font-style:italic;text-anchor:start;dominant-baseline:central">Solemates</text>
+
+  <!-- Small est label -->
+  <text x="260" y="243" font-size="9" dominant-baseline="central" text-anchor="start" opacity="0.6" style="fill:rgb(138, 129, 120);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.6;font-family:Jost, sans-serif;font-size:9px;font-weight:300;text-anchor:start;dominant-baseline:central">EST. 2024</text>
+
+  <!-- ── Gold hairline rule below wordmark ── -->
+  <line x1="256" y1="258" x2="598" y2="258" stroke="url(#jgrad)" stroke-width="0.75" opacity="0.35" style="fill:rgb(0, 0, 0);color:rgb(255, 255, 255);stroke-width:0.75px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.35;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+</svg>
