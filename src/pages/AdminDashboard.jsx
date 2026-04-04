@@ -1221,7 +1221,7 @@ export default function AdminDashboard() {
 const fetchSubscribers = async () => {
   try {
     const token = localStorage.getItem("adminToken");
-    const response = await fetch("http://localhost:5000/api/newsletter/subscribers", {
+    const response = await fetch("https://jofta-backend.onrender.com/api/newsletter/subscribers", {
       headers: { Authorization: token }
     });
     const data = await response.json();
@@ -1280,7 +1280,7 @@ const exportSubscribersToCSV = () => {
   if (result.isConfirmed) {
     try {
       const token = localStorage.getItem("adminToken");
-      const response = await fetch("http://localhost:5000/api/newsletter/send", {
+      const response = await fetch("https://jofta-backend.onrender.com/api/newsletter/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1346,7 +1346,7 @@ const deleteSubscriber = async (email) => {
   
   try {
     const token = localStorage.getItem("adminToken");
-    const response = await fetch("http://localhost:5000/api/newsletter/unsubscribe", {
+    const response = await fetch("https://jofta-backend.onrender.com/api/newsletter/unsubscribe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1358,7 +1358,7 @@ const deleteSubscriber = async (email) => {
     if (!response.ok) throw new Error("Failed to remove subscriber");
     
     // Refresh subscribers list
-    const subscribersRes = await fetch("http://localhost:5000/api/newsletter/subscribers", {
+    const subscribersRes = await fetch("https://jofta-backend.onrender.com/api/newsletter/subscribers", {
       headers: { Authorization: token }
     });
     if (subscribersRes.ok) {
@@ -1380,7 +1380,7 @@ const deleteSubscriber = async (email) => {
       const fetchPosts = async () => {
         try {
           const token = localStorage.getItem("adminToken");
-          const response = await fetch("http://localhost:5000/api/posts", {
+          const response = await fetch("https://jofta-backend.onrender.com/api/posts", {
             headers: { Authorization: token },
           });
           const data = await response.json();
@@ -1407,7 +1407,7 @@ const deleteSubscriber = async (email) => {
         try {
           const token = localStorage.getItem("adminToken");
           const response = await fetch(
-            `http://localhost:5000/api/posts/${postId}`,
+            `https://jofta-backend.onrender.com/api/posts/${postId}`,
             {
               method: "DELETE",
               headers: { Authorization: token },
@@ -1490,7 +1490,7 @@ const deleteSubscriber = async (email) => {
 
       try {
         // Fetch orders
-        const ordersRes = await fetch("http://localhost:5000/api/orders", {
+        const ordersRes = await fetch("https://jofta-backend.onrender.com/api/orders", {
           headers: { Authorization: token },
         });
         if (!ordersRes.ok) throw new Error("Failed to fetch orders");
@@ -1516,7 +1516,7 @@ const deleteSubscriber = async (email) => {
         setOrders(transformedOrders);
 
         // Fetch products
-        const productsRes = await fetch("http://localhost:5000/api/products");
+        const productsRes = await fetch("https://jofta-backend.onrender.com/api/products");
         if (productsRes.ok) {
           const productsData = await productsRes.json();
           setProducts(productsData);
@@ -1561,14 +1561,14 @@ const deleteSubscriber = async (email) => {
         setLoading(false);
       }
       // Fetch posts
-      const postsRes = await fetch("http://localhost:5000/api/posts");
+      const postsRes = await fetch("https://jofta-backend.onrender.com/api/posts");
       if (postsRes.ok) {
         const postsData = await postsRes.json();
         setPosts(postsData.posts || []);
       }
       // Fetch subscribers
       const subscribersRes = await fetch(
-        "http://localhost:5000/api/newsletter/subscribers",
+        "https://jofta-backend.onrender.com/api/newsletter/subscribers",
         {
           headers: { Authorization: token },
         },
@@ -1758,7 +1758,7 @@ const deleteSubscriber = async (email) => {
 
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await fetch(`http://localhost:5000/api/orders/${orderId}`, {
+      const res = await fetch(`https://jofta-backend.onrender.com/api/orders/${orderId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -1808,7 +1808,7 @@ const deleteSubscriber = async (email) => {
     try {
       const token = localStorage.getItem("adminToken");
       const res = await fetch(
-        `http://localhost:5000/api/products/${productId}`,
+        `https://jofta-backend.onrender.com/api/products/${productId}`,
         {
           method: "DELETE",
           headers: { Authorization: token },
@@ -1838,7 +1838,7 @@ const deleteSubscriber = async (email) => {
 const fetchSubscribers = async () => {
   try {
     const token = localStorage.getItem("adminToken");
-    const response = await fetch("http://localhost:5000/api/newsletter/subscribers", {
+    const response = await fetch("https://jofta-backend.onrender.com/api/newsletter/subscribers", {
       headers: { Authorization: token }
     });
     const data = await response.json();
@@ -1905,7 +1905,7 @@ const deleteSubscriber = async (email) => {
   
   try {
     const token = localStorage.getItem("adminToken");
-    const response = await fetch("http://localhost:5000/api/newsletter/unsubscribe", {
+    const response = await fetch("https://jofta-backend.onrender.com/api/newsletter/unsubscribe", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1976,7 +1976,7 @@ const sendNewsletter = async () => {
     
     try {
       const token = localStorage.getItem("adminToken");
-      const response = await fetch("http://localhost:5000/api/newsletter/send", {
+      const response = await fetch("https://jofta-backend.onrender.com/api/newsletter/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
