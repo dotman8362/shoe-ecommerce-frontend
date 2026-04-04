@@ -587,6 +587,7 @@ export default function SuccessPage() {
           <p className="sp-subtitle">
             Your order has been received and is now being processed.
             You will be contacted with shipping details shortly.
+            Check your Email/Spam Folder
           </p>
 
           <div className="sp-contact">
