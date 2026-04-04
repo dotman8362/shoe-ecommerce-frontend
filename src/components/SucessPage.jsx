@@ -523,7 +523,7 @@ export default function SuccessPage() {
 
     (async () => {
       try {
-        const res = await axios.post("http://localhost:5000/api/send-order-email", {
+        const res = await axios.post("https://jofta-backend.onrender.com/api/send-order-email", {
           shipping, cart, total, email: shipping.email,
         });
        
