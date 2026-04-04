@@ -24,6 +24,7 @@ import WishlistPage from "./pages/WishList";
 import TestimonialsPage from "./pages/Testimonial";
 import AddEditPost from "./admin/AddEditPost";
 import LoadingSpinner from "./components/LoadingSpinner";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -74,6 +75,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/testimonials" element={<TestimonialsPage />} />
+             <Route path="/privacy" element={<PrivacyPolicy />} />
             
             {/* ADMIN ROUTES */}
             <Route path="/admin-login" element={<AdminLogin />} />
