@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react"; // Remove useEffect
 import { useCart } from "../context/CartContext";
+import { useQuery } from "@tanstack/react-query"; // ✅ Add this import
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { fetchProductById } from "../api/products";
@@ -730,15 +731,23 @@ export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  // ✅ CHANGE: Replace static product lookup with state
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // ✅ REPLACE useState + useEffect with useQuery
+  const { 
+    data: product, 
+    isLoading: loading, 
+    error 
+  } = useQuery({
+    queryKey: ['product', id],
+    queryFn: () => fetchProductById(id),
+    staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
+    cacheTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
+    enabled: !!id, // Only run if id exists
+  });
   
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useCart();
 
-  // ✅ CHANGE: Initialize with product data once loaded
+  // Initialize selections after product loads
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -748,61 +757,30 @@ export default function ProductDetail() {
   const [liked, setLiked] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
 
-  // WhatsApp business number (replace with your actual number)
+  // WhatsApp business number
   const WHATSAPP_NUMBER = "2349033080879";
 
-  // ✅ NEW: Fetch product from backend
-  useEffect(() => {
-    const loadProduct = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await fetchProductById(id);
-        setProduct(data);
-        
-        // Initialize selections after product loads
-        if (data.colors && data.colors.length > 0) {
-          setSelectedColor(data.colors[0]);
-        }
-        if (data.sizes && data.sizes.length > 0) {
-          setSelectedSize(data.sizes[0]);
-        }
-      } catch (err) {
-        console.error('Error loading product:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Update selections when product loads
+  if (product && !selectedColor && product.colors?.length > 0) {
+    setSelectedColor(product.colors[0]);
+  }
+  if (product && !selectedSize && product.sizes?.length > 0) {
+    setSelectedSize(product.sizes[0]);
+  }
 
-    if (id) {
-      loadProduct();
-    }
-  }, [id]);
-
-  useEffect(() => {
+  // Handle window resize
+  useState(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 900);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  useEffect(() => {
+  // Scroll to top when product loads
+  if (product && !loading) {
     window.scrollTo(0, 0);
-  }, []);
+  }
 
-  // ✅ CHANGE: Update selections when product changes
-  useEffect(() => {
-    if (product) {
-      if (product.colors && product.colors.length > 0 && !selectedColor) {
-        setSelectedColor(product.colors[0]);
-      }
-      if (product.sizes && product.sizes.length > 0 && !selectedSize) {
-        setSelectedSize(product.sizes[0]);
-      }
-    }
-  }, [product, selectedColor, selectedSize]);
-
-  // ✅ NEW: Loading state
+  // Loading state
   if (loading) {
     return (
       <div className="pd-page">
@@ -817,7 +795,7 @@ export default function ProductDetail() {
     );
   }
 
-  // ✅ NEW: Error state
+  // Error state
   if (error) {
     return (
       <div className="pd-page">
@@ -838,7 +816,7 @@ export default function ProductDetail() {
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
             <h2>Error Loading Product</h2>
-            <p>{error}</p>
+            <p>{error.message || "Failed to load product"}</p>
             <button className="pd-notfound-btn" onClick={() => window.location.reload()}>
               Try Again
             </button>
@@ -848,7 +826,7 @@ export default function ProductDetail() {
     );
   }
 
-  // ✅ CHANGE: Not found check
+  // Not found state
   if (!product) {
     return (
       <div className="pd-page">
@@ -941,7 +919,7 @@ export default function ProductDetail() {
   // Calculate original price (20% markup if not provided)
   const originalPrice = product.originalPrice || (product.price * 1.2).toFixed(2);
   
-  // Check if product is in stock (default to true if not specified)
+  // Check if product is in stock
   const inStock = product.stock !== undefined ? product.stock > 0 : true;
 
   return (
