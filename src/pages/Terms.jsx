@@ -992,8 +992,8 @@ const SECTIONS = [
             <strong style={{ color: "var(--text)", fontWeight: 400 }}>Jofta Solemates</strong><br />
             Olukotun Compound, Oke Alapata Area, Ogbomosho, Oyo State<br />
             Email: <a href="mailto:ajagbejanet2018@gmail.com" className="tc-link">ajagbejanet2018@gmail.com</a><br />
-            Phone: <a href="tel:+2349137496458" className="tc-link">+234 913 749 6458</a><br />
-            WhatsApp: <a href="https://wa.me/2349137496458" className="tc-link" target="_blank" rel="noopener noreferrer">+234 913 749 6458</a>
+            Phone: <a href="tel:+2349137496458" className="tc-link">+234 903 308 0879</a><br />
+            WhatsApp: <a href="https://wa.me/2349137496458" className="tc-link" target="_blank" rel="noopener noreferrer">+234 903 308 0879</a>
           </p>
         </div>
         <p className="tc-text">
