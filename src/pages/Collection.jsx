@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react"; // Remove useEffect since React Query handles it
 import { Link } from "react-router-dom";
-// import { products } from "../data/Products";
 import { useCart } from "../context/CartContext";
-import { ProductCard } from "../components/NewArrival";
 import { useLocation } from "react-router-dom";
-import { useMemo } from "react";
-
+import { useQuery } from "@tanstack/react-query"; // ✅ Add this import
 import { fetchAllProducts } from "../api/products";
+
+
+
 
 
 
@@ -882,30 +882,20 @@ export default function Collections() {
   const [activeFilter, setActiveFilter] = useState("All");
   const [priceRange, setPriceRange] = useState("all");
   const [visibleCount, setVisibleCount] = useState(6);
-  const [products, setProducts] = useState([]); // NEW: State for products from backend
-  const [loading, setLoading] = useState(true); // NEW: Loading state
-  const [error, setError] = useState(null); // NEW: Error state
   const { addToCart, cart } = useCart();
   const location = useLocation();
 
-  // NEW: Fetch products from backend when component mounts
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await fetchAllProducts();
-        setProducts(data);
-      } catch (err) {
-        console.error('Error loading products:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProducts();
-  }, []); // Empty dependency array = run once on mount
+  // ✅ REPLACE your useState + useEffect with useQuery
+  const { 
+    data: products = [], 
+    isLoading: loading, 
+    error 
+  } = useQuery({
+    queryKey: ['products'],
+    queryFn: fetchAllProducts,
+    staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
+    cacheTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
+  });
 
   const params = new URLSearchParams(location.search);
   const search = (params.get("search") || "").toLowerCase();
@@ -965,7 +955,7 @@ export default function Collections() {
     setVisibleCount(6);
   };
 
-  // NEW: Loading state UI
+  // Loading state UI
   if (loading) {
     return (
       <section className="col-section">
@@ -988,7 +978,7 @@ export default function Collections() {
     );
   }
 
-  // NEW: Error state UI
+  // Error state UI
   if (error) {
     return (
       <section className="col-section">
@@ -1007,7 +997,7 @@ export default function Collections() {
             <line x1="12" y1="8" x2="12" y2="12" />
             <circle cx="12" cy="16" r="0.5" fill="#8a8178" stroke="none" />
           </svg>
-          <p>Error: {error}</p>
+          <p>Error: {error.message || "Failed to load products"}</p>
           <button 
             onClick={() => window.location.reload()} 
             style={{ marginTop: '20px', padding: '8px 24px', background: 'var(--gold)', border: 'none', color: '#0e0c0a', cursor: 'pointer', fontFamily: 'var(--sans)', letterSpacing: '0.1em' }}
