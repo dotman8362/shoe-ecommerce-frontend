@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useRef } from "react"; // Remove useEffect
+import { useState, useRef,useEffect } from "react"; // Remove useEffect
 import { useCart } from "../context/CartContext";
 import { useQuery } from "@tanstack/react-query"; // ✅ Add this import
 import Swal from "sweetalert2";
