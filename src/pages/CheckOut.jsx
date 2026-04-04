@@ -781,7 +781,7 @@ export default function CheckoutPage() {
       }
     };
     
-    const res = await fetch(`http://localhost:5000/api/payment/verify`, {
+    const res = await fetch(`https://jofta-backend.onrender.com/api/payment/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(verifyPayload),
@@ -849,7 +849,7 @@ const payWithPaystack = async () => {
     
     console.log("📤 Sending to backend:", payload);
     
-    const res = await fetch(`http://localhost:5000/api/payment/initialize`, {
+    const res = await fetch(`https://jofta-backend.onrender.com/api/payment/initialize`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
