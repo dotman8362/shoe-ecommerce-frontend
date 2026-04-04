@@ -847,7 +847,7 @@ const payWithPaystack = async () => {
       }
     };
     
-    console.log("📤 Sending to backend:", payload);
+    
     
     const res = await fetch(`https://jofta-backend.onrender.com/api/payment/initialize`, {
       method: "POST",
