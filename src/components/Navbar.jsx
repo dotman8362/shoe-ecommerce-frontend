@@ -888,7 +888,12 @@ export default function FloneNavbar() {
                   className={`fn-mobile-link${isActive ? " active" : ""}`}
                 >
                   {link.label}
-                  <span className="fn-mobile-link-arrow">&#8599;</span>
+                  <span className="fn-mobile-link-arrow">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/>
+    <polyline points="12 5 19 12 12 19"/>
+  </svg>
+</span>
                 </Link>
               );
             })}
