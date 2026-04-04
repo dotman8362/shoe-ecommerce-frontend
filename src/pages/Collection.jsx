@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"; // Remove useEffect since React Query handles it
+import { useState, useRef, useEffect } from "react"; // Remove useEffect since React Query handles it
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useLocation } from "react-router-dom";
