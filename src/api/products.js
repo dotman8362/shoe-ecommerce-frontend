@@ -1,5 +1,5 @@
 // src/api/products.js
-const API_BASE = 'http://localhost:5000/api'; // Change to your actual backend URL
+const API_BASE = 'https://jofta-backend.onrender.com/api'; // Change to your actual backend URL
 
 // Fetch single product by ID
 export async function fetchProductById(id) {
