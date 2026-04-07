@@ -624,7 +624,7 @@ export default function FloneNavbar() {
         // Fetch all products and filter on backend? Or use search endpoint
         // Option 1: Use a dedicated search endpoint (recommended)
         const response = await fetch(
-          `http://localhost:5000/api/products/search?q=${encodeURIComponent(searchQuery.trim())}`
+          `https://jofta-backend.onrender.com/api/products/search?q=${encodeURIComponent(searchQuery.trim())}`
         );
         
         if (response.ok) {
@@ -632,7 +632,7 @@ export default function FloneNavbar() {
           setSearchResults(data.slice(0, 5)); // Show top 5 results
         } else {
           // Fallback: fetch all and filter client-side
-          const allProductsRes = await fetch(`http://localhost:5000/api/products`);
+          const allProductsRes = await fetch(`https://jofta-backend.onrender.com/api/products`);
           if (allProductsRes.ok) {
             const allProducts = await allProductsRes.json();
             const query = searchQuery.toLowerCase();
