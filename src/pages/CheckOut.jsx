@@ -734,7 +734,7 @@ const swalDefaults = {
 };
 
 // ✅ Add your Paystack public key here
-const PAYSTACK_PUBLIC_KEY = "pk_test_e713eca30e00f08d201d6d57a23a1f0d0e19e9af";
+const PAYSTACK_PUBLIC_KEY = "pk_live_44b8e74e1bf27f48877ba17034757f993cd9657b";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
