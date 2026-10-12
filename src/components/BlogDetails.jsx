@@ -483,7 +483,7 @@ export default function BlogDetails() {
     const fetchPost = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/api/posts/${id}`);
+        const response = await fetch(`https://jofta-backend.onrender.com/api/posts/${id}`);
         
         if (!response.ok) {
           if (response.status === 404) {

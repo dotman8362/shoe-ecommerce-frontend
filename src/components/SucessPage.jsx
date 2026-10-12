@@ -523,7 +523,7 @@ export default function SuccessPage() {
 
     (async () => {
       try {
-        const res = await axios.post("http://localhost:5000/api/send-order-email", {
+        const res = await axios.post("https://jofta-backend.onrender.com/api/send-order-email", {
           shipping, cart, total, email: shipping.email,
         });
        
@@ -587,6 +587,7 @@ export default function SuccessPage() {
           <p className="sp-subtitle">
             Your order has been received and is now being processed.
             You will be contacted with shipping details shortly.
+            Check your Email/Spam Folder
           </p>
 
           <div className="sp-contact">

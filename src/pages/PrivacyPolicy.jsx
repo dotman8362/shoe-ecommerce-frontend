@@ -558,7 +558,7 @@ const SECTIONS = [
       <>
         <p className="pp-sec-text">
           We collect information you provide directly to us when you place an order,
-          create an account, contact our support team, or interact with our services.
+         contact our support team, or interact with our services.
           This information helps us deliver and improve your experience with Jofta Solemates.
         </p>
         <ul className="pp-list">
@@ -753,7 +753,7 @@ const SECTIONS = [
             <strong style={{ color: "var(--text)", fontWeight: 400 }}>Jofta Solemates</strong><br />
             Olukotun Compound, Oke Alapata Area, Ogbomosho, Oyo State<br />
             Email: <a href="mailto:ajagbejanet2018@gmail.com" className="pp-link">ajagbejanet2018@gmail.com</a><br />
-            Phone: <a href="tel:+2349137496458" className="pp-link">+234 913 749 6458</a>
+            Phone: <a href="tel:+2349137496458" className="pp-link">+234 903 308 0879</a>
           </p>
         </div>
         <p className="pp-sec-text">

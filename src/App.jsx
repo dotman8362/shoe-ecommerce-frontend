@@ -25,6 +25,10 @@ import TestimonialsPage from "./pages/Testimonial";
 import AddEditPost from "./admin/AddEditPost";
 import LoadingSpinner from "./components/LoadingSpinner";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+<<<<<<< HEAD
+=======
+import TermsAndConditions from "./pages/Terms";
+>>>>>>> ebd9856ca3dd63f8ee86dd0f8c67e18f27bd85a7
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -76,6 +80,10 @@ function App() {
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/testimonials" element={<TestimonialsPage />} />
              <Route path="/privacy" element={<PrivacyPolicy />} />
+<<<<<<< HEAD
+=======
+             <Route path="/terms" element={<TermsAndConditions />} />
+>>>>>>> ebd9856ca3dd63f8ee86dd0f8c67e18f27bd85a7
             
             {/* ADMIN ROUTES */}
             <Route path="/admin-login" element={<AdminLogin />} />

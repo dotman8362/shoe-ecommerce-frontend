@@ -35,7 +35,7 @@ export default function AddEditPost() {
   const fetchPost = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const response = await fetch(`http://localhost:5000/api/posts/${id}`, {
+      const response = await fetch(`https://jofta-backend.onrender.com/api/posts/${id}`, {
         headers: { Authorization: token }
       });
       const data = await response.json();
@@ -68,7 +68,7 @@ export default function AddEditPost() {
 
     try {
       const token = localStorage.getItem("adminToken");
-      const url = id ? `http://localhost:5000/api/posts/${id}` : "http://localhost:5000/api/posts";
+      const url = id ? `https://jofta-backend.onrender.com/api/posts/${id}` : "https://jofta-backend.onrender.com/api/posts";
       const method = id ? "PUT" : "POST";
 
       const response = await fetch(url, {

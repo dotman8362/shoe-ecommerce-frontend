@@ -624,7 +624,7 @@ export default function FloneNavbar() {
         // Fetch all products and filter on backend? Or use search endpoint
         // Option 1: Use a dedicated search endpoint (recommended)
         const response = await fetch(
-          `http://localhost:5000/api/products/search?q=${encodeURIComponent(searchQuery.trim())}`
+          `https://jofta-backend.onrender.com/api/products/search?q=${encodeURIComponent(searchQuery.trim())}`
         );
         
         if (response.ok) {
@@ -632,7 +632,7 @@ export default function FloneNavbar() {
           setSearchResults(data.slice(0, 5)); // Show top 5 results
         } else {
           // Fallback: fetch all and filter client-side
-          const allProductsRes = await fetch(`http://localhost:5000/api/products`);
+          const allProductsRes = await fetch(`https://jofta-backend.onrender.com/api/products`);
           if (allProductsRes.ok) {
             const allProducts = await allProductsRes.json();
             const query = searchQuery.toLowerCase();
@@ -888,7 +888,12 @@ export default function FloneNavbar() {
                   className={`fn-mobile-link${isActive ? " active" : ""}`}
                 >
                   {link.label}
-                  <span className="fn-mobile-link-arrow">&#8599;</span>
+                  <span className="fn-mobile-link-arrow">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="5" y1="12" x2="19" y2="12"/>
+    <polyline points="12 5 19 12 12 19"/>
+  </svg>
+</span>
                 </Link>
               );
             })}
