@@ -3,13 +3,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query"; // ✅ Add this import
-import { fetchAllProducts } from "../api/products";
-
-
-
-
-
-
+import { fetchAllProducts, fetchAllCollections } from "../api/products";
 
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap');
@@ -640,10 +634,15 @@ const CSS = `
 /* ── Heart icon ── */
 function HeartIcon({ filled }) {
   return (
-    <svg viewBox="0 0 24 24" fill={filled ? "#c49c68" : "none"}
-      stroke={filled ? "#c49c68" : "#8a8178"} strokeWidth="1.5"
-      strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    <svg
+      viewBox="0 0 24 24"
+      fill={filled ? "#c49c68" : "none"}
+      stroke={filled ? "#c49c68" : "#8a8178"}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
     </svg>
   );
 }
@@ -652,21 +651,22 @@ function HeartIcon({ filled }) {
 function StarRating({ rating }) {
   return (
     <div className="col-stars">
-      {[1,2,3,4,5].map(s => (
-        <svg key={s} width="11" height="11" viewBox="0 0 24 24"
-          fill={s <= rating ? "#c49c68" : "#2a2620"} stroke="none">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.07 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      {[1, 2, 3, 4, 5].map((s) => (
+        <svg
+          key={s}
+          width="11"
+          height="11"
+          viewBox="0 0 24 24"
+          fill={s <= rating ? "#c49c68" : "#2a2620"}
+          stroke="none"
+        >
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.07 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
       ))}
       <span>({rating})</span>
     </div>
   );
 }
-
-
-
-
-
 
 /* ── Product card ── */
 
@@ -685,27 +685,24 @@ function CollectionCard({ product, index, addToCart }) {
   // Generate optimized Cloudinary URL with different sizes
   const getOptimizedImageUrl = (url, width = 400, height = 400) => {
     if (!url) return null;
-    if (imgError) return 'https://via.placeholder.com/500?text=No+Image';
-    
+    if (imgError) return "https://via.placeholder.com/500?text=No+Image";
+
     // If it's already a Cloudinary URL, add transformations
-    if (url.includes('cloudinary.com')) {
+    if (url.includes("cloudinary.com")) {
       return url.replace(
-        '/upload/',
-        `/upload/w_${width},h_${height},c_fill,q_auto,f_auto/`
+        "/upload/",
+        `/upload/w_${width},h_${height},c_fill,q_auto,f_auto/`,
       );
     }
-    
+
     // For non-Cloudinary URLs, return as is
     return url;
   };
 
   // Get low-quality placeholder (blurry, loads instantly)
   const getPlaceholderUrl = (url) => {
-    if (!url || !url.includes('cloudinary.com')) return null;
-    return url.replace(
-      '/upload/',
-      '/upload/w_20,h_20,c_fill,q_1,e_blur:500/'
-    );
+    if (!url || !url.includes("cloudinary.com")) return null;
+    return url.replace("/upload/", "/upload/w_20,h_20,c_fill,q_1,e_blur:500/");
   };
 
   useEffect(() => {
@@ -716,7 +713,7 @@ function CollectionCard({ product, index, addToCart }) {
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.08, rootMargin: "100px" } // Increased rootMargin for earlier loading
+      { threshold: 0.08, rootMargin: "100px" }, // Increased rootMargin for earlier loading
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -726,7 +723,7 @@ function CollectionCard({ product, index, addToCart }) {
   const handleLike = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    setLiked(prev => !prev);
+    setLiked((prev) => !prev);
     setHeartAnim(true);
     setTimeout(() => setHeartAnim(false), 300);
   };
@@ -744,21 +741,27 @@ function CollectionCard({ product, index, addToCart }) {
     >
       <div className="col-card">
         <div className="col-img-wrap">
-          <Link to={`/product/${product._id || product.id}`} style={{ display: "block", textDecoration: "none" }}>
-            
+          <Link
+            to={`/product/${product._id || product.id}`}
+            style={{ display: "block", textDecoration: "none" }}
+          >
             {/* Skeleton loader */}
             {!imageLoaded && (
-              <div className="col-img-skeleton" style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: "linear-gradient(90deg, #1a1714 25%, #2a2520 50%, #1a1714 75%)",
-                backgroundSize: "200% 100%",
-                animation: "shimmer 1.5s infinite",
-                zIndex: 1
-              }} />
+              <div
+                className="col-img-skeleton"
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background:
+                    "linear-gradient(90deg, #1a1714 25%, #2a2520 50%, #1a1714 75%)",
+                  backgroundSize: "200% 100%",
+                  animation: "shimmer 1.5s infinite",
+                  zIndex: 1,
+                }}
+              />
             )}
 
             {/* Blur placeholder (if using Cloudinary) */}
@@ -771,7 +774,7 @@ function CollectionCard({ product, index, addToCart }) {
                   opacity: 0.8,
                   filter: "blur(10px)",
                   transform: "scale(1.05)",
-                  transition: "opacity 0.3s ease"
+                  transition: "opacity 0.3s ease",
                 }}
               />
             )}
@@ -786,14 +789,16 @@ function CollectionCard({ product, index, addToCart }) {
                 decoding="async"
                 onLoad={() => setImageLoaded(true)}
                 onError={() => setImgError(true)}
-                style={{ 
+                style={{
                   opacity: imageLoaded ? 1 : 0,
-                  transition: "opacity 0.3s ease-in-out"
+                  transition: "opacity 0.3s ease-in-out",
                 }}
               />
             )}
 
-            {product.badge && <span className="col-badge">{product.badge}</span>}
+            {product.badge && (
+              <span className="col-badge">{product.badge}</span>
+            )}
 
             <div className="col-cart-overlay">
               <button
@@ -816,9 +821,16 @@ function CollectionCard({ product, index, addToCart }) {
                   window.location.href = `/product/${product._id || product.id}`;
                 }}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="1.5"
-                  strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <circle cx="12" cy="12" r="3" />
                   <path d="M22 12c-2.667 4.667-6 7-10 7S4.667 16.667 2 12c2.667-4.667 6-7 10-7s7.333 2.333 10 7z" />
                 </svg>
@@ -835,11 +847,14 @@ function CollectionCard({ product, index, addToCart }) {
             }}
             aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
           >
-            <HeartIcon filled={isWishlisted(product._id || product.id)}/>
+            <HeartIcon filled={isWishlisted(product._id || product.id)} />
           </button>
         </div>
 
-        <Link to={`/product/${product._id || product.id}`} style={{ textDecoration: "none" }}>
+        <Link
+          to={`/product/${product._id || product.id}`}
+          style={{ textDecoration: "none" }}
+        >
           <div className="col-info">
             <div className="col-category">{product.category}</div>
             <h3 className="col-name">{product.name}</h3>
@@ -886,55 +901,73 @@ export default function Collections() {
   const location = useLocation();
 
   // ✅ REPLACE your useState + useEffect with useQuery
-  const { 
-    data: products = [], 
-    isLoading: loading, 
-    error 
+  const {
+    data: products = [],
+    isLoading: loading,
+    error,
   } = useQuery({
-    queryKey: ['products'],
+    queryKey: ["products"],
     queryFn: fetchAllProducts,
     staleTime: 5 * 60 * 1000, // Data is fresh for 5 minutes
     cacheTime: 10 * 60 * 1000, // Keep in cache for 10 minutes
   });
 
+  const { data: collections = [] } = useQuery({
+    queryKey: ["collections"],
+    queryFn: fetchAllCollections,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
+  const getCollectionName = (product) => {
+    if (product?.collection?.title) return product.collection.title;
+    return product?.category || "Uncategorized";
+  };
+
   const params = new URLSearchParams(location.search);
   const search = (params.get("search") || "").toLowerCase();
 
   // First filter by search
-  let filteredBySearch = products.filter((product) =>
-    product.name?.toLowerCase().includes(search) ||
-    product.category?.toLowerCase().includes(search) ||
-    product.description?.toLowerCase().includes(search)
+  let filteredBySearch = products.filter(
+    (product) =>
+      product.name?.toLowerCase().includes(search) ||
+      getCollectionName(product).toLowerCase().includes(search) ||
+      product.description?.toLowerCase().includes(search),
   );
 
   // Then filter by category
   const filteredByCategory =
     activeFilter === "All"
       ? filteredBySearch
-      : filteredBySearch.filter((p) => p.category === activeFilter);
+      : filteredBySearch.filter((p) => getCollectionName(p) === activeFilter);
 
   // Finally filter by price range
   const getFilteredByPrice = () => {
     if (priceRange === "all") return filteredByCategory;
     if (priceRange === "under-15k") {
-      return filteredByCategory.filter(p => p.price < 15000);
+      return filteredByCategory.filter((p) => p.price < 15000);
     }
     if (priceRange === "10k-20k") {
-      return filteredByCategory.filter(p => p.price >= 10000 && p.price <= 20000);
+      return filteredByCategory.filter(
+        (p) => p.price >= 10000 && p.price <= 20000,
+      );
     }
     if (priceRange === "over-20k") {
-      return filteredByCategory.filter(p => p.price > 20000);
+      return filteredByCategory.filter((p) => p.price > 20000);
     }
     return filteredByCategory;
   };
 
   const filteredProducts = getFilteredByPrice();
-  
-  // Derive unique categories from product data
+
+  // Derive unique categories from Sanity collections first, then fall back to product data
   const categories = [
     "All",
     ...Array.from(
-      new Set(products.map((p) => p.category).filter(Boolean))
+      new Set([
+        ...collections.map((collection) => collection.title).filter(Boolean),
+        ...products.map((p) => getCollectionName(p)).filter(Boolean),
+      ]),
     ),
   ];
 
@@ -964,14 +997,34 @@ export default function Collections() {
         <div className="col-glow col-glow-2" />
         <header className="col-header">
           <div className="col-label">Browse Our Range</div>
-          <h2 className="col-title">Our <em>Collections</em></h2>
+          <h2 className="col-title">
+            Our <em>Collections</em>
+          </h2>
           <hr className="col-rule" />
           <p className="col-subtitle">Loading exquisite footwear...</p>
         </header>
-        <div className="col-grid" style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div className="col-img-skeleton" style={{ width: '80px', height: '80px', borderRadius: '50%', margin: '0 auto 20px' }} />
-            <p style={{ color: 'var(--text-muted)' }}>Curating our collection...</p>
+        <div
+          className="col-grid"
+          style={{
+            minHeight: "400px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div style={{ textAlign: "center" }}>
+            <div
+              className="col-img-skeleton"
+              style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                margin: "0 auto 20px",
+              }}
+            />
+            <p style={{ color: "var(--text-muted)" }}>
+              Curating our collection...
+            </p>
           </div>
         </div>
       </section>
@@ -987,20 +1040,37 @@ export default function Collections() {
         <div className="col-glow col-glow-2" />
         <header className="col-header">
           <div className="col-label">Browse Our Range</div>
-          <h2 className="col-title">Our <em>Collections</em></h2>
+          <h2 className="col-title">
+            Our <em>Collections</em>
+          </h2>
           <hr className="col-rule" />
           <p className="col-subtitle">Unable to load products at this moment</p>
         </header>
         <div className="col-empty">
-          <svg className="col-empty-icon" viewBox="0 0 24 24" fill="none" stroke="#8a8178" strokeWidth="1.2">
+          <svg
+            className="col-empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#8a8178"
+            strokeWidth="1.2"
+          >
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="8" x2="12" y2="12" />
             <circle cx="12" cy="16" r="0.5" fill="#8a8178" stroke="none" />
           </svg>
           <p>Error: {error.message || "Failed to load products"}</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            style={{ marginTop: '20px', padding: '8px 24px', background: 'var(--gold)', border: 'none', color: '#0e0c0a', cursor: 'pointer', fontFamily: 'var(--sans)', letterSpacing: '0.1em' }}
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              marginTop: "20px",
+              padding: "8px 24px",
+              background: "var(--gold)",
+              border: "none",
+              color: "#0e0c0a",
+              cursor: "pointer",
+              fontFamily: "var(--sans)",
+              letterSpacing: "0.1em",
+            }}
           >
             Try Again
           </button>
@@ -1018,11 +1088,13 @@ export default function Collections() {
 
       <header className="col-header">
         <div className="col-label">Browse Our Range</div>
-        <h2 className="col-title">Our <em>Collections</em></h2>
+        <h2 className="col-title">
+          Our <em>Collections</em>
+        </h2>
         <hr className="col-rule" />
         <p className="col-subtitle">
-          Every piece, a statement. Explore the full breadth of our
-          handcrafted artisan footwear.
+          Every piece, a statement. Explore the full breadth of our handcrafted
+          artisan footwear.
         </p>
       </header>
 
@@ -1059,7 +1131,8 @@ export default function Collections() {
         </div>
 
         <span className="col-count">
-          {filteredProducts.length} {filteredProducts.length === 1 ? "piece" : "pieces"}
+          {filteredProducts.length}{" "}
+          {filteredProducts.length === 1 ? "piece" : "pieces"}
         </span>
       </div>
 

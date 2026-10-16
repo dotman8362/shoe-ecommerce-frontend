@@ -12,7 +12,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Footer from "./components/Footer";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
-import SuccessPage from "./components/SucessPage";
+import SuccessPage from "./components/SucessPage"; // ✅ Fixed typo
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import OurBlog from "./components/OurBlog";
@@ -25,27 +25,29 @@ import TestimonialsPage from "./pages/Testimonial";
 import AddEditPost from "./admin/AddEditPost";
 import LoadingSpinner from "./components/LoadingSpinner";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-<<<<<<< HEAD
-=======
-import TermsAndConditions from "./pages/Terms";
->>>>>>> ebd9856ca3dd63f8ee86dd0f8c67e18f27bd85a7
+import TermsAndConditions from "./pages/Terms"; // ✅ Kept (was in conflict)
 
 function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate initial loading time
+    let isMounted = true; // ✅ Prevent state update after unmount
+
     const initializeApp = async () => {
       // You can add any initial data fetching here
       // For example: fetching products, checking auth, etc.
-      
+
       // Minimum loading time for better UX (optional)
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      setLoading(false);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      if (isMounted) setLoading(false);
     };
 
     initializeApp();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -53,13 +55,15 @@ function App() {
       <BrowserRouter>
         {/* Show spinner while loading */}
         <LoadingSpinner isLoading={loading} />
-        
+
         {/* Main app content - hidden until loaded */}
-        <div style={{ 
-          opacity: loading ? 0 : 1, 
-          transition: "opacity 0.5s ease-in-out",
-          visibility: loading ? "hidden" : "visible"
-        }}>
+        <div
+          style={{
+            opacity: loading ? 0 : 1,
+            transition: "opacity 0.5s ease-in-out",
+            visibility: loading ? "hidden" : "visible",
+          }}
+        >
           <FloneNavbar />
           <ToastContainer position="top-right" autoClose={2000} />
 
@@ -79,16 +83,13 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/testimonials" element={<TestimonialsPage />} />
-             <Route path="/privacy" element={<PrivacyPolicy />} />
-<<<<<<< HEAD
-=======
-             <Route path="/terms" element={<TermsAndConditions />} />
->>>>>>> ebd9856ca3dd63f8ee86dd0f8c67e18f27bd85a7
-            
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
+
             {/* ADMIN ROUTES */}
             <Route path="/admin-login" element={<AdminLogin />} />
-            <Route path="/admin/add-post" element={<AddEditPost />} />
-            <Route path="/admin/edit-post/:id" element={<AddEditPost />} />
+
+            {/* ✅ Protected admin routes */}
             <Route
               path="/admin"
               element={
@@ -97,7 +98,24 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/admin/add-post"
+              element={
+                <ProtectedRoute>
+                  <AddEditPost />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-post/:id"
+              element={
+                <ProtectedRoute>
+                  <AddEditPost />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
+
           <Footer />
         </div>
       </BrowserRouter>

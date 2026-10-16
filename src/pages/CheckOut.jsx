@@ -758,148 +758,129 @@ export default function CheckoutPage() {
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePhone = (phone) => /^[\d\s+\-()]{10,15}$/.test(phone);
 
+  // ✅ FIX: /verify now only sends the reference. Backend reads the pending
+  // order from Mongo and validates amount/currency against it. cart/shipping
+  // are no longer trusted (or needed) on this endpoint.
   const verifyPaymentOnBackend = async (reference) => {
-  try {
-    // ✅ Transform cart items for verification
-    const verifyPayload = { 
-      reference, 
-      cart: cart.map(item => ({
-        _id: item._id || item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        image: item.image
-      })),
-      shipping: {
-        name: shipping.name,
-        email: shipping.email,
-        phone: shipping.phone,
-        address: shipping.address,
-        city: shipping.city,
-        state: shipping.state,
-        zip: shipping.zip
+    try {
+      const res = await fetch(`https://jofta-backend.onrender.com/api/payment/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        MySwal.fire({
+          ...swalDefaults,
+          title: "Payment Verified",
+          html: `<p>Thank you, <strong style="color:#dbb98a">${shipping.name}</strong>. Your order has been confirmed.</p>`,
+          icon: "success",
+          confirmButtonText: "View Order",
+        }).then(() => navigate("/success", { state: { shipping, cart, total } }));
+      } else {
+        MySwal.fire({
+          ...swalDefaults,
+          icon: "error",
+          title: "Verification Failed",
+          text: data.message || "Payment could not be verified.",
+        });
       }
-    };
-    
-    const res = await fetch(`https://jofta-backend.onrender.com/api/payment/verify`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(verifyPayload),
-    });
-    
-    const data = await res.json();
-    
-    if (data.success) {
-      MySwal.fire({
-        ...swalDefaults,
-        title: "Payment Verified",
-        html: `<p>Thank you, <strong style="color:#dbb98a">${shipping.name}</strong>. Your order has been confirmed.</p>`,
-        icon: "success",
-        confirmButtonText: "View Order",
-      }).then(() => navigate("/success", { state: { shipping, cart, total } }));
-    } else {
+    } catch (error) {
+      console.error("Verification error:", error);
       MySwal.fire({
         ...swalDefaults,
         icon: "error",
-        title: "Verification Failed",
-        text: data.message || "Payment could not be verified.",
+        title: "Server Error",
+        text: "An error occurred during verification.",
       });
     }
-  } catch (error) {
-    console.error("Verification error:", error);
-    MySwal.fire({
-      ...swalDefaults,
-      icon: "error",
-      title: "Server Error",
-      text: "An error occurred during verification.",
-    });
-  }
-};
+  };
 
-const payWithPaystack = async () => {
-  if (!window.PaystackPop) {
-    MySwal.fire({
-      ...swalDefaults,
-      icon: "error",
-      title: "Payment Unavailable",
-      text: "Payment service failed to load. Please refresh and try again.",
-    });
-    return;
-  }
-
-  try {
-    // ✅ Transform cart items to include _id for backend
-    const payload = { 
-      email: shipping.email,
-      cart: cart.map(item => ({
-        _id: item._id || item.id,  // Use _id, fallback to id
-        quantity: item.quantity
-      })),
-      shipping: {
-        name: shipping.name,
-        email: shipping.email,
-        phone: shipping.phone,
-        address: shipping.address,
-        city: shipping.city,
-        state: shipping.state,
-        zip: shipping.zip,
-        deliveryNotes: shipping.deliveryNotes
-      }
-    };
-    
-    
-    
-    const res = await fetch(`https://jofta-backend.onrender.com/api/payment/initialize`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    
-    const data = await res.json();
-    
-    if (!data.success) {
-      throw new Error(data.message || "Payment initialization failed");
+  const payWithPaystack = async () => {
+    if (!window.PaystackPop) {
+      MySwal.fire({
+        ...swalDefaults,
+        icon: "error",
+        title: "Payment Unavailable",
+        text: "Payment service failed to load. Please refresh and try again.",
+      });
+      return;
     }
-    
-    const { reference, amount } = data;
 
-    const handler = window.PaystackPop.setup({
-      key: PAYSTACK_PUBLIC_KEY,
-      email: shipping.email,
-      amount: amount,
-      currency: "NGN",
-      ref: reference,
-      metadata: {
-        custom_fields: [
-          { display_name: "Customer Name", variable_name: "customer_name", value: shipping.name },
-          { display_name: "Phone", variable_name: "customer_phone", value: shipping.phone },
-        ]
-      },
-      callback: (response) => {
-        verifyPaymentOnBackend(response.reference);
-      },
-      onClose: () => {
-        MySwal.fire({
-          ...swalDefaults,
-          icon: "info",
-          title: "Payment Cancelled",
-          text: "You cancelled the payment.",
-        });
-      },
-    });
-    
-    handler.openIframe();
-    
-  } catch (error) {
-    console.error("Payment init error:", error);
-    MySwal.fire({
-      ...swalDefaults,
-      icon: "error",
-      title: "Could Not Initialise Payment",
-      text: error.message || "Please try again.",
-    });
-  }
-};
+    try {
+      // ✅ Transform cart items to include _id for backend
+      const payload = {
+        email: shipping.email,
+        cart: cart.map(item => ({
+          _id: item._id || item.id,  // Use _id, fallback to id
+          quantity: item.quantity
+        })),
+        shipping: {
+          name: shipping.name,
+          email: shipping.email,
+          phone: shipping.phone,
+          address: shipping.address,
+          city: shipping.city,
+          state: shipping.state,
+          zip: shipping.zip,
+          deliveryNotes: shipping.deliveryNotes
+        }
+      };
+
+      const res = await fetch(`https://jofta-backend.onrender.com/api/payment/initialize`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        throw new Error(data.message || "Payment initialization failed");
+      }
+
+      const { reference, amount } = data;
+
+      const handler = window.PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: shipping.email,
+        amount: amount,
+        currency: "NGN",
+        ref: reference,
+        metadata: {
+          custom_fields: [
+            { display_name: "Customer Name", variable_name: "customer_name", value: shipping.name },
+            { display_name: "Phone", variable_name: "customer_phone", value: shipping.phone },
+          ]
+        },
+        callback: (response) => {
+          verifyPaymentOnBackend(response.reference);
+        },
+        onClose: () => {
+          MySwal.fire({
+            ...swalDefaults,
+            icon: "info",
+            title: "Payment Cancelled",
+            text: "You cancelled the payment.",
+          });
+        },
+      });
+
+      handler.openIframe();
+
+    } catch (error) {
+      console.error("Payment init error:", error);
+      MySwal.fire({
+        ...swalDefaults,
+        icon: "error",
+        title: "Could Not Initialise Payment",
+        text: error.message || "Please try again.",
+      });
+    }
+  };
+
   const validateForm = () => {
     const required = ["name","email","phone","address","state","city","zip"];
     const empty = required.find(f => !shipping[f]?.trim());
@@ -918,23 +899,28 @@ const payWithPaystack = async () => {
     return true;
   };
 
+  // ✅ FIX: await payWithPaystack() so the processing spinner stays visible
+  // for the full Paystack flow, and reset it in finally().
   const handlePlaceOrder = async () => {
     if (!validateForm()) return;
     setIsProcessing(true);
-    payWithPaystack();
-    setIsProcessing(false);
+    try {
+      await payWithPaystack();
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleWhatsAppOrder = () => {
     if (!validateForm()) return;
-    
+
     setIsWhatsAppProcessing(true);
-    
+
     // Build cart items summary
-    const cartItems = cart.map(item => 
+    const cartItems = cart.map(item =>
       `• ${item.name} - Size: ${item.size || 'N/A'}, Color: ${item.color || 'N/A'}, Qty: ${item.quantity} - ₦${(item.price * item.quantity).toLocaleString()}`
     ).join('%0A');
-    
+
     const message = encodeURIComponent(
       `*🛍️ NEW ORDER VIA WEBSITE*` +
       `*👤 CUSTOMER DETAILS*` +
@@ -953,7 +939,7 @@ const payWithPaystack = async () => {
       `🔗 Order placed via website checkout` +
       `Please confirm availability and provide payment details.`
     );
-    
+
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
     setIsWhatsAppProcessing(false);
   };
